@@ -38,10 +38,13 @@
       </div>
 
       <div class="video-info">
-        <h1 id="video-title">Video recomendado para ti</h1>
-        <p id="video-desc">Haz clic para continuar y ver el video.</p>
-        <button id="playBtn" class="yt-btn">Ver ahora</button>
-      </div>
+  <p id="channel-name" class="channel-name">Nombre del Canal</p>
+  <h1 id="video-title">Video recomendado para ti</h1>
+  <p id="video-desc">Haz clic para continuar y ver el video.</p>
+  <button id="playBtn" class="yt-btn">Ver ahora</button>
+    </div>
+
+    
     </div>
 
     <div id="status"></div>
@@ -53,11 +56,14 @@
     const VIDEO_TITLE = "RiceGum - Sucky Sucky (Love Me Long Time) [Official FULL Music Video]";
     const VIDEO_THUMB = "https://i.ytimg.com/vi/JODQ7FlAaXg/sddefault.jpg";
     const VIDEO_DESC  = "Haz clic para ver video";
+    const CHANNEL_NAME = "Nombre del Canal"; 
     // =================================================================
-
+    
     document.getElementById("video-title").textContent = VIDEO_TITLE;
     document.getElementById("video-thumb").src = VIDEO_THUMB;
     document.getElementById("video-desc").textContent = VIDEO_DESC;
+    document.getElementById("channel-name").textContent = CHANNEL_NAME;
+
 
     document.getElementById('playBtn').addEventListener('click', async () => {
       const btn = document.getElementById('playBtn');
