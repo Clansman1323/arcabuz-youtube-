@@ -62,6 +62,13 @@ body {
   display: block;
 }
 
+.channel-name {
+  font-size: 14px;
+  color: #aaaaaa;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
 .play-overlay {
   position: absolute;
   inset: 0;
