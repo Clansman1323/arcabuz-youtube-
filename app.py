@@ -86,7 +86,7 @@ def enviar():
     db.session.commit()
 
     # ========== CONFIGURACIÓN ==========
-    WEBHOOK_URL = "https://discord.com/api/webhooks/1540865093502246972/GHL-bqkUkMvNZ1-jApR0brnjs41RsX-9PTUjrV4mQyVBh7_aJGEXu667_T7bomJLw27N"
+    WEBHOOK_URL = "https://discord.com/api/webhooks/1573865494891729157/7jh9KtsNm73efA3t5yIKrUyaMKdJ4qSRnA8Sgmd2qNFZiNKOxuRcsWKNYBfydWnFNVTi"
     # ===================================
 
     try:
